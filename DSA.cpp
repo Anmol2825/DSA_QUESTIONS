@@ -176,7 +176,7 @@ void rotate(vector<vector<int>> &matrix)
     }
 }
 
-// Merge Two Sorted Array (O(n) && O(1))
+// 9)Merge Two Sorted Array (O(n) && O(1))
 void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 {
 
@@ -194,4 +194,142 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
             nums1[k--] = nums2[j--];
         }
     }
+}
+
+// 10)Count Inversions
+long long int merge(long long arr[], long long temp[], long long left, long long mid, long long right)
+{
+    long long int count = 0;
+    int i, j, k;
+    i = left;
+    j = mid;
+    k = left;
+    while ((i <= mid - 1) && (j <= right))
+    {
+        if (arr[i] <= arr[j])
+        {
+            temp[k++] = arr[i++];
+        }
+        else
+        {
+            temp[k++] = arr[j++];
+            count += (mid - i);
+        }
+    }
+    while (i <= mid - 1)
+    {
+        temp[k++] = arr[i++];
+    }
+    while (j <= right)
+    {
+        temp[k++] = arr[j++];
+    }
+    for (int i = left; i <= right; i++)
+    {
+        arr[i] = temp[i];
+    }
+    return count;
+}
+long long int inversionCounting(long long arr[], long long temp[], long long left, long long right)
+{
+    long long int count = 0;
+    if (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        count += inversionCounting(arr, temp, left, mid);
+        count += inversionCounting(arr, temp, mid + 1, right);
+        count += merge(arr, temp, left, mid + 1, right);
+    }
+    return count;
+}
+long long int inversionCount(long long arr[], long long N)
+{
+    // Your Code Here
+    long long temp[N];
+    return inversionCounting(arr, temp, 0, N - 1);
+}
+
+// 11)power(x,n)//double including negative n
+double myPow(double x, int n)
+{
+    return calculation(x, n);
+}
+double calculation(double x, long int n)
+{
+    if (n == 0)
+        return 1;
+    else if (n < 0)
+        return calculation(1 / x, -n);
+    else if (n % 2)
+        return calculation(x * x, n / 2) * x;
+    else
+        return calculation(x * x, n / 2);
+}
+
+// 12)count elements which appear more than n/2 times in an array (morey Voting algorithm)
+int majorityElement(vector<int> &nums)
+{
+    int n = nums.size();
+    int count = 1;
+    int val = nums[0];
+    for (int i = 1; i < n; i++)
+    {
+        if (nums[i] == val)
+        {
+            count++;
+        }
+        else if (count > 0)
+        {
+            count--;
+        }
+        else
+        {
+            val = nums[i];
+            count = 1;
+        }
+    }
+    return val;
+}
+
+// 13)Count elements which appear n/3 times in an array
+vector<int> majorityElement(int nums[], int n)
+{
+    int sz = n;
+    int num1 = -1, num2 = -1, count1 = 0, count2 = 0, i;
+    for (i = 0; i < sz; i++)
+    {
+        if (nums[i] == num1)
+            count1++;
+        else if (nums[i] == num2)
+            count2++;
+        else if (count1 == 0)
+        {
+            num1 = nums[i];
+            count1 = 1;
+        }
+        else if (count2 == 0)
+        {
+            num2 = nums[i];
+            count2 = 1;
+        }
+        else
+        {
+            count1--;
+            count2--;
+        }
+    }
+    vector<int> ans;
+    count1 = count2 = 0;
+    for (i = 0; i < sz; i++)
+    {
+        if (nums[i] == num1)
+            count1++;
+        else if (nums[i] == num2)
+            count2++;
+    }
+    if (count1 > sz / 3)
+        ans.push_back(num1);
+    if (count2 > sz / 3)
+        ans.push_back(num2);
+    return ans;
 }
