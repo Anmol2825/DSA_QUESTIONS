@@ -332,4 +332,7 @@ vector<int> majorityElement(int nums[], int n)
     if (count2 > sz / 3)
         ans.push_back(num2);
     return ans;
+    // cout<<a
 }
+
+// 14) Reverse Pairs
